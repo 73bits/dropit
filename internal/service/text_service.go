@@ -31,3 +31,7 @@ func (s *TextService) Create(content string, ttlseconds int) (model.Text, error)
 	err := s.repo.Save(text)
 	return text, err
 }
+
+func (s *TextService) Get(id string) (model.Text, bool) {
+	return s.repo.Get(id)
+}
