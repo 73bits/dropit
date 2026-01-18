@@ -3,6 +3,7 @@ package handler
 import (
 	"encoding/json"
 	"net/http"
+	"strings"
 
 	"github.com/73bits/dropit/internal/service"
 )
@@ -33,5 +34,18 @@ func (h *TextHandler) Create(w http.ResponseWriter, r *http.Request) {
 
 	json.NewEncoder(w).Encode(map[string]string{
 		"url": "http://" + r.Host + "/text/" + text.ID,
+	})
+}
+
+func (h *TextHandler) Get(w http.ResponseWriter, r *http.Request) {
+	id := strings.TrimPrefix(r.URL.Path, "/text/")
+	text, ok := h.service.Get(id)
+	if !ok {
+		http.NotFound(w, r)
+		return
+	}
+
+	json.NewEncoder(w).Encode(map[string]string{
+		"content": text.Content,
 	})
 }
